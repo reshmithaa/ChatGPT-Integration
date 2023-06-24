@@ -1,13 +1,12 @@
 import logging
 
 import azure.functions as func
-# pip install opeanai
 import openai
 
 secret_key = 'your api key'
 
 #Sample
-# {"model":"text-davinci-003", "prompt":"Tell a boy name", "max_tokens":200, "temperature":0}
+# {"prompt":"Goku wating in airport", "n":1, "size":"1024x1024"}
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -20,10 +19,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info(type(req_body))
 
     # output
-    output = openai.Completion.create(
-        model=req_body["model"],
+    output = openai.Image.create(
             prompt=req_body["prompt"],
-            max_tokens=req_body["max_tokens"],
-            temperature=req_body['temperature']
+            n=req_body["n"],
+            size=req_body["size"]
         )
-    return func.HttpResponse(f"{output.choices[0]['text']}", status_code=200)
+    return func.HttpResponse(f"{output['data'][0]['url']}", status_code=200)
